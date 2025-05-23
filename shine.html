@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shine | Crypto Businesswoman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #0f0f0f;
+      color: #fff;
+    }
+    header {
+      background-color: #121212;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    header h3 {
+      color: #f0b90b;
+      font-weight: 600;
+    }
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #f0b90b;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #fff;
+    }
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      padding: 40px 20px;
+    }
+    .hero img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 4px solid #f0b90b;
+      box-shadow: 0 0 20px #f0b90b;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      color: #f0b90b;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+    }
+    .typewriter {
+      border-right: .15em solid #f0b90b;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: blink-caret .75s step-end infinite;
+      font-size: 1.3rem;
+      margin-top: 10px;
+      min-height: 30px;
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #f0b90b; }
+    }
+    section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+      animation: fadeIn 1s ease-in;
+    }
+    h2 {
+      color: #f0b90b;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    ul li {
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+    .btn {
+      background: #f0b90b;
+      padding: 10px 20px;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 10px 10px 0 0;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #fff;
+    }
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #121212;
+      color: #999;
+      font-size: 0.9rem;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h3>Shine K</h3>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <img src="C:\Users\SHINE K\Downloads\IMG_20240512_134900" />
+    <h1>Shine K</h1>
+    <p>Empowering the crypto future, one block at a time.</p>
+    <div class="typewriter" id="typewriter-text"></div>
+  </section>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I’m a crypto businesswoman and entrepreneur helping companies embrace the future of blockchain technology.</p>
+  </section>
+
+  <section id="services">
+    <h2>Services</h2>
+    <ul>
+      <li>Blockchain Strategy Consulting</li>
+      <li>Crypto Marketing Campaigns</li>
+      <li>DeFi Product Advisory</li>
+      <li>Keynote Speaking & Panels</li>
+    </ul>
+  </section>
+
+  <section id="achievements">
+    <h2>Achievements</h2>
+    <ul>
+      <li>Top 100 Women in Crypto (2024)</li>
+      <li>Founded 3 successful blockchain startups</li>
+      <li>Advisor to Fortune 500 tech firms</li>
+    </ul>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p style="text-align: center;">Let's work together! Reach out via email or social media below.</p>
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="https://wa.me/qr/SEA4WF6YA5SIO1" class="btn">Whatsapp</a>
+      <a href="https://linkedin.com/in/shinek" class="btn" target="_blank">LinkedIn</a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Shine K | Built with 💛 and blockchain
+  </footer>
+
+  <script>
+    const typewriterText = ["Crypto Strategist", "Web3 Advocate", "Blockchain Consultant"];
+    let i = 0, j = 0, current = "", isDeleting = false, speed = 150;
+
+    function type() {
+      const display = document.getElementById("typewriter-text");
+      if (i < typewriterText.length) {
+        if (!isDeleting && j <= typewriterText[i].length) {
+          current = typewriterText[i].substring(0, j++);
+          display.textContent = current;
+        }
+        if (isDeleting && j > 0) {
+          current = typewriterText[i].substring(0, j--);
+          display.textContent = current;
+        }
+        if (j === typewriterText[i].length) isDeleting = true;
+        if (isDeleting && j === 0) {
+          isDeleting = false;
+          i = (i + 1) % typewriterText.length;
+        }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
+
+    type();
+  </script>
+</body>
+</html>
