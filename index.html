@@ -3,422 +3,630 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Daily Routine Agent</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Your Personal Routine Agent</title>
     <style>
-        /* Custom font for better readability - Inter is included by Tailwind default */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            /* Using a subtle gradient for the background */
-            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%); /* Light gray to light blue */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
             min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .datetime {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .date-selector {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
-            color: #374151; /* Default text color */
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
-        /* Custom styles for checkbox to match theme */
-        input[type="checkbox"] {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            height: 1.5rem;
-            width: 1.5rem;
-            border: 2px solid #9ca3af; /* Gray-400 */
-            border-radius: 0.375rem; /* rounded-md */
-            background-color: #ffffff;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            display: inline-block;
-            vertical-align: middle;
-            position: relative;
+        .date-selector label {
+            font-weight: 500;
+            color: #495057;
         }
 
-        input[type="checkbox"]:checked {
-            background-color: #4f46e5; /* Indigo-600 */
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.45); /* Indigo-500 with opacity */
-        }
-
-        input[type="checkbox"]:checked::after {
-            content: '✔';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
+        .date-selector input {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
             font-size: 1rem;
-            line-height: 1;
         }
 
-        input[type="checkbox"]:focus {
+        .user-id {
+            font-size: 0.9rem;
+            color: #868e96;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .checklist {
+            display: grid;
+            gap: 15px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .checklist-item.completed {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #495057;
+        }
+
+        .expense-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .expense-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .expense-item label {
+            font-weight: 500;
+            color: #495057;
+            font-size: 1rem;
+        }
+
+        .expense-item input {
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .expense-item input:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.45); /* Indigo-500 with opacity */
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
         }
 
-        /* Styles for input fields */
-        input[type="number"], input[type="date"] {
-            transition: all 0.2s ease-in-out;
+        .total-expense {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #007bff;
         }
-        input[type="number"]:focus, input[type="date"]:focus {
-            border-color: #4f46e5; /* Indigo-600 */
-            box-shadow: 0 0 0 1px #4f46e5;
+
+        .save-btn {
+            width: 100%;
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .save-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .save-btn:active {
+            transform: translateY(1px);
+        }
+
+        .stats-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .date-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
-<body class="font-sans">
-    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center mb-4 leading-tight">
-            My Daily Agent
-        </h1>
-        <p id="currentTimeDisplay" class="text-lg sm:text-xl text-center text-gray-700 mb-6 font-medium">Loading time...</p>
-
-        <div class="mb-6 flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-            <label for="datePicker" class="text-gray-700 font-semibold text-lg">Select Date:</label>
-            <input
-                type="date"
-                id="datePicker"
-                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 shadow-sm"
-            />
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your Personal Routine Agent</h1>
+            <div class="datetime" id="datetime"></div>
+            
+            <div class="date-selector">
+                <label for="dateInput">Select Date:</label>
+                <input type="date" id="dateInput">
+            </div>
+            
+            <div class="user-id">User ID: MNvOXBj85KdEVWKpM6BFHuN3oaa2</div>
         </div>
 
-        <div id="messageDisplay" class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg relative mb-6 text-sm text-center hidden transition-all duration-300 ease-in-out" role="alert">
-            <!-- Messages will be displayed here -->
-        </div>
-
-        <div id="userIdDisplay" class="mb-6 text-xs sm:text-sm text-center text-gray-500 hidden">
-            <span class="font-semibold">User ID:</span> <span id="actualUserId" class="break-all"></span>
-        </div>
-
-        <div id="loadingIndicator" class="text-center py-8">
-            <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p class="text-gray-600 mt-3">Loading application...</p>
-        </div>
-
-        <div id="appContent" class="hidden">
-            <!-- Daily Routine Section -->
-            <div class="mb-8 p-4 bg-indigo-50 rounded-lg shadow-inner border border-indigo-100">
-                <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Daily Routine Check-off</h2>
-                <ul id="routineList" class="space-y-3">
-                    <!-- Routine items will be dynamically inserted here -->
-                </ul>
+        <div class="content">
+            <div class="section">
+                <h2>Daily Routine Check-off</h2>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="wakeup">
+                        <label for="wakeup">Wake up (6:00 - 6:20 AM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="bath">
+                        <label for="bath">Brush & Complete Bath</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="breakfast">
+                        <label for="breakfast">Have Breakfast (7:00 - 7:20 AM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="entrance">
+                        <label for="entrance">Go to Main Entrance (7:30 - 7:45 AM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="busToGuindy">
+                        <label for="busToGuindy">Catch bus to Guindy (from Sathyabama stop)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="travelToDLF">
+                        <label for="travelToDLF">Travel Guindy to DLF Ramapuram</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="reachDLF">
+                        <label for="reachDLF">Reach DLF Ramapuram (9:20 - 10:00 AM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lunch">
+                        <label for="lunch">Go for Lunch (1:00 PM - 1:30/1:40 PM) at A2B</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="exitWork">
+                        <label for="exitWork">Exit Work (5:00 PM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="shareAuto">
+                        <label for="shareAuto">Catch Share Auto (DLF to Guindy - 5:20-5:25 PM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="busToCollege">
+                        <label for="busToCollege">Catch Bus (Guindy to Sathyabama University)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="reachCollege">
+                        <label for="reachCollege">Reach College/Hostel (around 8:00 PM)</label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="dinner">
+                        <label for="dinner">Have Dinner (20 mins, 8:00 - 8:30 PM)</label>
+                    </div>
+                </div>
             </div>
 
-            <!-- Daily Expenses Section -->
-            <div class="p-4 bg-indigo-50 rounded-lg shadow-inner border border-indigo-100">
-                <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Daily Expenses</h2>
-                <div id="expenseInputs" class="space-y-4">
-                    <!-- Expense inputs will be dynamically inserted here -->
+            <div class="section">
+                <h2>Daily Expenses</h2>
+                <div class="expense-grid">
+                    <div class="expense-item">
+                        <label for="busToGuindyExpense">Bus (Sathyabama to Guindy):</label>
+                        <input type="number" id="busToGuindyExpense" min="0" step="0.01" placeholder="Enter amount in ₹">
+                    </div>
+                    
+                    <div class="expense-item">
+                        <label for="travelToDLFExpense">Travel (Guindy to DLF Ramapuram - Bus/Share Auto):</label>
+                        <input type="number" id="travelToDLFExpense" min="0" step="0.01" placeholder="Enter amount in ₹">
+                    </div>
+                    
+                    <div class="expense-item">
+                        <label for="lunchExpense">Lunch (A2B):</label>
+                        <input type="number" id="lunchExpense" min="0" step="0.01" placeholder="Enter amount in ₹">
+                    </div>
+                    
+                    <div class="expense-item">
+                        <label for="shareAutoExpense">Share Auto (DLF Ramapuram to Guindy):</label>
+                        <input type="number" id="shareAutoExpense" min="0" step="0.01" placeholder="Enter amount in ₹">
+                    </div>
+                    
+                    <div class="expense-item">
+                        <label for="busToCollegeExpense">Bus (Guindy to Sathyabama University):</label>
+                        <input type="number" id="busToCollegeExpense" min="0" step="0.01" placeholder="Enter amount in ₹">
+                    </div>
+                    
+                    <div class="expense-item">
+                        <label for="dinnerExpense">Dinner (Hostel):</label>
+                        <input type="number" id="dinnerExpense" min="0" step="0.01" placeholder="Enter amount in ₹">
+                    </div>
                 </div>
 
-                <div id="totalDailyExpenseDisplay" class="mt-6 text-center text-2xl font-extrabold text-indigo-900">
-                    Total Daily Expense: ₹0.00
+                <div class="total-expense">
+                    Total Daily Expense: ₹<span id="totalExpense">0.00</span>
                 </div>
+
+                <button class="save-btn" onclick="saveDailyData()">Save Daily Data</button>
             </div>
 
-            <button
-                id="saveButton"
-                class="w-full bg-gradient-to-r from-indigo-600 to-blue-500 text-white py-3 mt-8 rounded-lg text-lg font-semibold hover:from-indigo-700 hover:to-blue-600 transition-all duration-300 ease-in-out shadow-lg transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300"
-            >
-                Save Daily Data
-            </button>
+            <div class="stats-section">
+                <h2>Weekly Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="weeklyTotal">₹0.00</div>
+                        <div class="stat-label">This Week Total</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="avgDaily">₹0.00</div>
+                        <div class="stat-label">Daily Average</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="daysTracked">0</div>
+                        <div class="stat-label">Days Tracked</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <script>
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setCurrentDate();
+            loadTodayData();
+            updateStats();
+            
+            // Set up event listeners for expense inputs
+            setupExpenseCalculation();
+            
+            // Set up checkbox event listeners
+            setupCheckboxListeners();
+            
+            // Update date when date input changes
+            document.getElementById('dateInput').addEventListener('change', function() {
+                loadDataForDate(this.value);
+            });
+        });
 
-        // Global variables for Firebase and app state
-        let db;
-        let auth;
-        let currentUserId = null;
-        let selectedDate = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-        let routineStatus = {};
-        let expenses = {};
-        let totalDailyExpense = 0;
-        let isAuthReady = false; // Flag to ensure Firestore operations happen after auth
-
-        // DOM elements
-        const datePicker = document.getElementById('datePicker');
-        const messageDisplay = document.getElementById('messageDisplay');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        const actualUserIdSpan = document.getElementById('actualUserId');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const appContent = document.getElementById('appContent');
-        const routineList = document.getElementById('routineList');
-        const expenseInputsDiv = document.getElementById('expenseInputs');
-        const totalDailyExpenseDisplay = document.getElementById('totalDailyExpenseDisplay');
-        const saveButton = document.getElementById('saveButton');
-        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
-
-        // Routine definitions (for UI rendering)
-        const routineItemsDef = [
-            { key: 'wakeUp', label: 'Wake up (6:00 - 6:20 AM)' },
-            { key: 'brushBath', label: 'Brush & Complete Bath' },
-            { key: 'breakfast', label: 'Have Breakfast (7:00 - 7:20 AM)' },
-            { key: 'hostelEntrance', label: 'Go to Main Entrance (7:30 - 7:45 AM)' },
-            { key: 'busSathyabamaToGuindy', label: 'Catch bus to Guindy (from Sathyabama stop)' },
-            { key: 'travelGuindyToDlf', label: 'Travel Guindy to DLF Ramapuram' },
-            { key: 'reachDlf', label: 'Reach DLF Ramapuram (9:20 - 10:00 AM)' },
-            { key: 'lunch', label: 'Go for Lunch (1:00 PM - 1:30/1:40 PM) at A2B' },
-            { key: 'exitWork', label: 'Exit Work (5:00 PM)' },
-            { key: 'shareAutoDlfToGuindy', label: 'Catch Share Auto (DLF to Guindy - 5:20-5:25 PM)' },
-            { key: 'busGuindyToSathyabama', label: 'Catch Bus (Guindy to Sathyabama University)' },
-            { key: 'reachHostel', label: 'Reach College/Hostel (around 8:00 PM)' },
-            { key: 'dinner', label: 'Have Dinner (20 mins, 8:00 - 8:30 PM)' },
-        ];
-
-        // Expense definitions (for UI rendering)
-        const expenseItemsDef = [
-            { key: 'busSathyabama', label: 'Bus (Sathyabama to Guindy)' },
-            { key: 'travelGuindyDlf', label: 'Travel (Guindy to DLF Ramapuram - Bus/Share Auto)' },
-            { key: 'lunchA2B', label: 'Lunch (A2B)' },
-            { key: 'shareAutoDlfGuindy', label: 'Share Auto (DLF Ramapuram to Guindy)' },
-            { key: 'busGuindySathyabama', label: 'Bus (Guindy to Sathyabama University)' },
-        ];
-
-        // --- Utility Functions ---
-        function showMessage(msg, type = 'info') {
-            messageDisplay.innerText = msg;
-            messageDisplay.classList.remove('hidden');
-            messageDisplay.classList.remove('bg-red-100', 'border-red-400', 'text-red-700', 'bg-blue-100', 'border-blue-400', 'text-blue-700');
-            if (type === 'error') {
-                messageDisplay.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-            } else {
-                messageDisplay.classList.add('bg-blue-100', 'border-blue-400', 'text-blue-700');
-            }
-            // Automatically hide message after a short delay
-            setTimeout(hideMessage, 3000);
-        }
-
-        function hideMessage() {
-            messageDisplay.classList.add('hidden');
-        }
-
-        function showLoading() {
-            loadingIndicator.classList.remove('hidden');
-            appContent.classList.add('hidden');
-        }
-
-        function hideLoading() {
-            loadingIndicator.classList.add('hidden');
-            appContent.classList.remove('hidden');
-        }
-
-        function updateCurrentTimeDisplay() {
+        function updateDateTime() {
             const now = new Date();
-            const hour = now.getHours();
-            let greeting = "Good Evening!";
-            if (hour < 12) greeting = "Good Morning!";
-            else if (hour < 18) greeting = "Good Afternoon!";
-            currentTimeDisplay.innerText = `${greeting} Today is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+            
+            const greeting = getGreeting(now.getHours());
+            document.getElementById('datetime').textContent = 
+                `${greeting}! Today is ${now.toLocaleDateString('en-US', options)}`;
         }
 
-        // --- Render UI Functions ---
-        function renderRoutineItems() {
-            routineList.innerHTML = ''; // Clear previous items
-            routineItemsDef.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'flex items-center space-x-3 bg-white p-3 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer';
-                li.innerHTML = `
-                    <input
-                        type="checkbox"
-                        id="${item.key}"
-                        class="form-checkbox"
-                        ${routineStatus[item.key] ? 'checked' : ''}
-                    />
-                    <label for="${item.key}" class="flex-1 text-gray-800 cursor-pointer text-base sm:text-lg ${routineStatus[item.key] ? 'line-through text-gray-500 italic' : ''}">
-                        ${item.label}
-                    </label>
-                `;
-                // Add event listener to the checkbox itself
-                li.querySelector('input').addEventListener('change', (e) => handleRoutineToggle(item.key, e.target.checked));
-                routineList.appendChild(li);
+        function getGreeting(hour) {
+            if (hour < 12) return 'Good Morning';
+            if (hour < 17) return 'Good Afternoon';
+            return 'Good Evening';
+        }
+
+        function setCurrentDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateInput').value = today;
+        }
+
+        function setupExpenseCalculation() {
+            const expenseInputs = [
+                'busToGuindyExpense',
+                'travelToDLFExpense', 
+                'lunchExpense',
+                'shareAutoExpense',
+                'busToCollegeExpense',
+                'dinnerExpense'
+            ];
+
+            expenseInputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateTotal);
             });
         }
 
-        function renderExpenseInputs() {
-            expenseInputsDiv.innerHTML = ''; // Clear previous inputs
-            expenseItemsDef.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'flex flex-col';
-                div.innerHTML = `
-                    <label for="${item.key}" class="text-gray-700 font-medium mb-1 text-base sm:text-lg">${item.label}:</label>
-                    <input
-                        type="number"
-                        id="${item.key}"
-                        value="${expenses[item.key] || 0}"
-                        placeholder="Enter amount in INR"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 shadow-sm"
-                    />
-                `;
-                div.querySelector('input').addEventListener('input', (e) => handleExpenseChange(item.key, e.target.value));
-                expenseInputsDiv.appendChild(div);
-            });
-            updateTotalExpenseDisplay();
-        }
-
-        function updateTotalExpenseDisplay() {
-            const sum = Object.values(expenses).reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-            totalDailyExpense = sum; // Update global variable
-            totalDailyExpenseDisplay.innerText = `Total Daily Expense: ₹${sum.toFixed(2)}`;
-        }
-
-        // --- Handlers ---
-        function handleRoutineToggle(itemKey, isChecked) {
-            routineStatus = { ...routineStatus, [itemKey]: isChecked };
-            renderRoutineItems(); // Re-render to update line-through style
-            saveDailyData(); // Automatically save on change
-        }
-
-        function handleExpenseChange(itemKey, value) {
-            expenses = { ...expenses, [itemKey]: parseFloat(value) || 0 };
-            updateTotalExpenseDisplay();
-            saveDailyData(); // Automatically save on change
-        }
-
-        async function saveDailyData() {
-            if (!db || !currentUserId || !selectedDate || !isAuthReady) {
-                showMessage("Error: App not fully initialized. Please try again.", 'error');
-                return;
-            }
-            showMessage('Saving data...');
-            try {
-                const docRef = doc(db, `artifacts/${__app_id}/users/${currentUserId}/dailyRoutines`, selectedDate);
-                await setDoc(docRef, {
-                    date: selectedDate,
-                    routineStatus: routineStatus,
-                    expenses: expenses,
-                    totalDailyExpense: totalDailyExpense,
-                    timestamp: new Date(), // Using client-side timestamp for simplicity
-                }, { merge: true }); // Use merge: true to update existing fields without overwriting the whole document
-                // showMessage('Data saved successfully!'); // Message is shown by showMessage()
-            } catch (error) {
-                console.error("Error saving daily routine data:", error);
-                showMessage("Error saving data.", 'error');
-            }
-        }
-
-        let unsubscribeFirestore = null; // To store the unsubscribe function for onSnapshot
-
-        async function loadDailyData() {
-            if (!db || !currentUserId || !selectedDate || !isAuthReady) {
-                console.log("Firestore not ready for loading data.");
-                return;
-            }
-
-            // Unsubscribe from previous listener if any
-            if (unsubscribeFirestore) {
-                unsubscribeFirestore();
-            }
-
-            showLoading();
-            showMessage(`Loading data for ${selectedDate}...`);
-
-            const docRef = doc(db, `artifacts/${__app_id}/users/${currentUserId}/dailyRoutines`, selectedDate);
-
-            unsubscribeFirestore = onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    // Initialize states with defaults if not present
-                    routineStatus = data.routineStatus || {};
-                    expenses = data.expenses || {};
-                    totalDailyExpense = data.totalDailyExpense || 0; // Set from loaded data
-
-                    showMessage("Data loaded successfully!");
-                } else {
-                    // If no data exists for the day, reset to defaults
-                    routineStatus = routineItemsDef.reduce((acc, item) => ({ ...acc, [item.key]: false }), {});
-                    expenses = expenseItemsDef.reduce((acc, item) => ({ ...acc, [item.key]: 0 }), {});
-                    totalDailyExpense = 0;
-                    showMessage("No data for this date. Start fresh!");
-                }
-                renderRoutineItems();
-                renderExpenseInputs();
-                updateTotalExpenseDisplay();
-                hideLoading();
-            }, (error) => {
-                console.error("Error fetching daily routine data:", error);
-                showMessage("Error loading data.", 'error');
-                hideLoading();
-            });
-        }
-
-        // --- Initialization ---
-        window.onload = async function() {
-            updateCurrentTimeDisplay();
-            setInterval(updateCurrentTimeDisplay, 1000); // Update time every second
-
-            datePicker.value = selectedDate; // Set initial date picker value
-            datePicker.addEventListener('change', (e) => {
-                selectedDate = e.target.value;
-                loadDailyData();
-            });
-
-            saveButton.addEventListener('click', saveDailyData);
-
-            try {
-                // Retrieve Firebase config and app ID from global variables
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Use default if __app_id is not set
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-                if (!firebaseConfig) {
-                    console.error("Firebase config not found. Make sure __firebase_config is set.");
-                    showMessage("Error: Firebase configuration missing.", 'error');
-                    hideLoading();
-                    return;
-                }
-
-                // Initialize Firebase
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // Sign in or listen for auth state changes
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        currentUserId = user.uid;
-                        actualUserIdSpan.innerText = currentUserId;
-                        userIdDisplay.classList.remove('hidden');
-                        isAuthReady = true;
-                        await loadDailyData(); // Load data once authenticated
-                    } else if (initialAuthToken) {
-                        try {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                            // onAuthStateChanged will be triggered again with the user
-                        } catch (error) {
-                            console.error("Error signing in with custom token:", error);
-                            showMessage("Error signing in. Falling back to anonymous.", 'error');
-                            await signInAnonymously(auth); // Fallback to anonymous
-                        }
+        function setupCheckboxListeners() {
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const item = this.closest('.checklist-item');
+                    if (this.checked) {
+                        item.classList.add('completed');
                     } else {
-                        try {
-                            await signInAnonymously(auth);
-                            // onAuthStateChanged will be triggered again with the user
-                        } catch (error) {
-                            console.error("Error signing in anonymously:", error);
-                            showMessage("Error signing in anonymously.", 'error');
-                            hideLoading();
-                        }
+                        item.classList.remove('completed');
                     }
                 });
+            });
+        }
 
-            } catch (error) {
-                console.error("Error initializing Firebase:", error);
-                showMessage("Error initializing the application.", 'error');
-                hideLoading();
+        function calculateTotal() {
+            const expenseInputs = [
+                'busToGuindyExpense',
+                'travelToDLFExpense',
+                'lunchExpense', 
+                'shareAutoExpense',
+                'busToCollegeExpense',
+                'dinnerExpense'
+            ];
+
+            let total = 0;
+            expenseInputs.forEach(id => {
+                const value = parseFloat(document.getElementById(id).value) || 0;
+                total += value;
+            });
+
+            document.getElementById('totalExpense').textContent = total.toFixed(2);
+        }
+
+        function saveDailyData() {
+            const selectedDate = document.getElementById('dateInput').value;
+            const data = {
+                date: selectedDate,
+                checklist: {},
+                expenses: {},
+                total: parseFloat(document.getElementById('totalExpense').textContent)
+            };
+
+            // Save checklist data
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                data.checklist[checkbox.id] = checkbox.checked;
+            });
+
+            // Save expense data
+            const expenseInputs = [
+                'busToGuindyExpense',
+                'travelToDLFExpense',
+                'lunchExpense',
+                'shareAutoExpense', 
+                'busToCollegeExpense',
+                'dinnerExpense'
+            ];
+
+            expenseInputs.forEach(id => {
+                data.expenses[id] = parseFloat(document.getElementById(id).value) || 0;
+            });
+
+            // Save to memory (in a real app, this would go to a database)
+            if (!window.dailyData) {
+                window.dailyData = {};
             }
-        };
+            window.dailyData[selectedDate] = data;
+
+            // Update statistics
+            updateStats();
+
+            // Show success message
+            const btn = document.querySelector('.save-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Data Saved Successfully!';
+            btn.style.backgroundColor = '#28a745';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = '#007bff';
+            }, 2000);
+        }
+
+        function loadTodayData() {
+            const today = new Date().toISOString().split('T')[0];
+            loadDataForDate(today);
+        }
+
+        function loadDataForDate(date) {
+            if (!window.dailyData || !window.dailyData[date]) {
+                // Clear all inputs if no data exists for this date
+                clearAllInputs();
+                return;
+            }
+
+            const data = window.dailyData[date];
+
+            // Load checklist data
+            Object.keys(data.checklist).forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox) {
+                    checkbox.checked = data.checklist[id];
+                    const item = checkbox.closest('.checklist-item');
+                    if (checkbox.checked) {
+                        item.classList.add('completed');
+                    } else {
+                        item.classList.remove('completed');
+                    }
+                }
+            });
+
+            // Load expense data
+            Object.keys(data.expenses).forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = data.expenses[id] || 0;
+                }
+            });
+
+            // Update total
+            calculateTotal();
+        }
+
+        function clearAllInputs() {
+            // Clear checkboxes
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.closest('.checklist-item').classList.remove('completed');
+            });
+
+            // Clear expense inputs
+            const expenseInputs = document.querySelectorAll('.expense-item input');
+            expenseInputs.forEach(input => {
+                input.value = '';
+            });
+
+            // Reset total
+            document.getElementById('totalExpense').textContent = '0.00';
+        }
+
+        function updateStats() {
+            if (!window.dailyData) {
+                return;
+            }
+
+            const today = new Date();
+            const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            
+            let weeklyTotal = 0;
+            let daysTracked = 0;
+
+            Object.keys(window.dailyData).forEach(dateStr => {
+                const date = new Date(dateStr);
+                if (date >= oneWeekAgo && date <= today) {
+                    weeklyTotal += window.dailyData[dateStr].total || 0;
+                    daysTracked++;
+                }
+            });
+
+            const avgDaily = daysTracked > 0 ? weeklyTotal / daysTracked : 0;
+
+            document.getElementById('weeklyTotal').textContent = `₹${weeklyTotal.toFixed(2)}`;
+            document.getElementById('avgDaily').textContent = `₹${avgDaily.toFixed(2)}`;
+            document.getElementById('daysTracked').textContent = daysTracked;
+        }
+
+        // Update time every second
+        setInterval(updateDateTime, 1000);
     </script>
 </body>
 </html>
