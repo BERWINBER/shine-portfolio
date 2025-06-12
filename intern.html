@@ -1,424 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Daily Routine Agent</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom font for better readability - Inter is included by Tailwind default */
-        body {
-            /* Using a subtle gradient for the background */
-            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%); /* Light gray to light blue */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            color: #374151; /* Default text color */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shine | Crypto Businesswoman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #0f0f0f;
+      color: #fff;
+    }
 
-        /* Custom styles for checkbox to match theme */
-        input[type="checkbox"] {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            height: 1.5rem;
-            width: 1.5rem;
-            border: 2px solid #9ca3af; /* Gray-400 */
-            border-radius: 0.375rem; /* rounded-md */
-            background-color: #ffffff;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            display: inline-block;
-            vertical-align: middle;
-            position: relative;
-        }
+    header {
+      background-color: #121212;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    header h3 {
+      color: #f0b90b;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
 
-        input[type="checkbox"]:checked {
-            background-color: #4f46e5; /* Indigo-600 */
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.45); /* Indigo-500 with opacity */
-        }
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #f0b90b;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #fff;
+    }
 
-        input[type="checkbox"]:checked::after {
-            content: '✔';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 1rem;
-            line-height: 1;
-        }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background: #f0b90b;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
 
-        input[type="checkbox"]:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.45); /* Indigo-500 with opacity */
-        }
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
 
-        /* Styles for input fields */
-        input[type="number"], input[type="date"] {
-            transition: all 0.2s ease-in-out;
-        }
-        input[type="number"]:focus, input[type="date"]:focus {
-            border-color: #4f46e5; /* Indigo-600 */
-            box-shadow: 0 0 0 1px #4f46e5;
-        }
-    </style>
+      nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #121212;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        padding: 10px 0;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+
+      header {
+        flex-direction: row;
+      }
+    }
+
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      padding: 40px 20px;
+    }
+
+    .hero img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 4px solid #f0b90b;
+      box-shadow: 0 0 20px #f0b90b;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      color: #f0b90b;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 600px;
+    }
+
+    .typewriter {
+      border-right: .15em solid #f0b90b;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: blink-caret .75s step-end infinite;
+      font-size: 1.2rem;
+      margin-top: 10px;
+      min-height: 30px;
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #f0b90b; }
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+      animation: fadeIn 1s ease-in;
+    }
+
+    h2 {
+      color: #f0b90b;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    ul li {
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      background: #f0b90b;
+      padding: 10px 20px;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 10px 10px 0 0;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #fff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #121212;
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
 </head>
-<body class="font-sans">
-    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center mb-4 leading-tight">
-            My Daily Agent
-        </h1>
-        <p id="currentTimeDisplay" class="text-lg sm:text-xl text-center text-gray-700 mb-6 font-medium">Loading time...</p>
-
-        <div class="mb-6 flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-            <label for="datePicker" class="text-gray-700 font-semibold text-lg">Select Date:</label>
-            <input
-                type="date"
-                id="datePicker"
-                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 shadow-sm"
-            />
-        </div>
-
-        <div id="messageDisplay" class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg relative mb-6 text-sm text-center hidden transition-all duration-300 ease-in-out" role="alert">
-            <!-- Messages will be displayed here -->
-        </div>
-
-        <div id="userIdDisplay" class="mb-6 text-xs sm:text-sm text-center text-gray-500 hidden">
-            <span class="font-semibold">User ID:</span> <span id="actualUserId" class="break-all"></span>
-        </div>
-
-        <div id="loadingIndicator" class="text-center py-8">
-            <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p class="text-gray-600 mt-3">Loading application...</p>
-        </div>
-
-        <div id="appContent" class="hidden">
-            <!-- Daily Routine Section -->
-            <div class="mb-8 p-4 bg-indigo-50 rounded-lg shadow-inner border border-indigo-100">
-                <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Daily Routine Check-off</h2>
-                <ul id="routineList" class="space-y-3">
-                    <!-- Routine items will be dynamically inserted here -->
-                </ul>
-            </div>
-
-            <!-- Daily Expenses Section -->
-            <div class="p-4 bg-indigo-50 rounded-lg shadow-inner border border-indigo-100">
-                <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Daily Expenses</h2>
-                <div id="expenseInputs" class="space-y-4">
-                    <!-- Expense inputs will be dynamically inserted here -->
-                </div>
-
-                <div id="totalDailyExpenseDisplay" class="mt-6 text-center text-2xl font-extrabold text-indigo-900">
-                    Total Daily Expense: ₹0.00
-                </div>
-            </div>
-
-            <button
-                id="saveButton"
-                class="w-full bg-gradient-to-r from-indigo-600 to-blue-500 text-white py-3 mt-8 rounded-lg text-lg font-semibold hover:from-indigo-700 hover:to-blue-600 transition-all duration-300 ease-in-out shadow-lg transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300"
-            >
-                Save Daily Data
-            </button>
-        </div>
+<body>
+  <header>
+    <h3>Shine K</h3>
+    <div class="menu-toggle" id="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+    <nav id="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <section class="hero">
+    <img src="IMG_20240512_134900.jpg" alt="Shine Portrait" />
+    <h1>Shine K</h1>
+    <p>Empowering the crypto future, one block at a time.</p>
+    <div class="typewriter" id="typewriter-text"></div>
+  </section>
 
-        // Global variables for Firebase and app state
-        let db;
-        let auth;
-        let currentUserId = null;
-        let selectedDate = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-        let routineStatus = {};
-        let expenses = {};
-        let totalDailyExpense = 0;
-        let isAuthReady = false; // Flag to ensure Firestore operations happen after auth
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I’m a crypto businesswoman and entrepreneur helping companies embrace the future of blockchain technology.</p>
+  </section>
 
-        // DOM elements
-        const datePicker = document.getElementById('datePicker');
-        const messageDisplay = document.getElementById('messageDisplay');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        const actualUserIdSpan = document.getElementById('actualUserId');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const appContent = document.getElementById('appContent');
-        const routineList = document.getElementById('routineList');
-        const expenseInputsDiv = document.getElementById('expenseInputs');
-        const totalDailyExpenseDisplay = document.getElementById('totalDailyExpenseDisplay');
-        const saveButton = document.getElementById('saveButton');
-        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+  <section id="services">
+    <h2>Services</h2>
+    <ul>
+      <li>Blockchain Strategy Consulting</li>
+      <li>Crypto Marketing Campaigns</li>
+      <li>DeFi Product Advisory</li>
+      <li>Keynote Speaking & Panels</li>
+    </ul>
+  </section>
 
-        // Routine definitions (for UI rendering)
-        const routineItemsDef = [
-            { key: 'wakeUp', label: 'Wake up (6:00 - 6:20 AM)' },
-            { key: 'brushBath', label: 'Brush & Complete Bath' },
-            { key: 'breakfast', label: 'Have Breakfast (7:00 - 7:20 AM)' },
-            { key: 'hostelEntrance', label: 'Go to Main Entrance (7:30 - 7:45 AM)' },
-            { key: 'busSathyabamaToGuindy', label: 'Catch bus to Guindy (from Sathyabama stop)' },
-            { key: 'travelGuindyToDlf', label: 'Travel Guindy to DLF Ramapuram' },
-            { key: 'reachDlf', label: 'Reach DLF Ramapuram (9:20 - 10:00 AM)' },
-            { key: 'lunch', label: 'Go for Lunch (1:00 PM - 1:30/1:40 PM) at A2B' },
-            { key: 'exitWork', label: 'Exit Work (5:00 PM)' },
-            { key: 'shareAutoDlfToGuindy', label: 'Catch Share Auto (DLF to Guindy - 5:20-5:25 PM)' },
-            { key: 'busGuindyToSathyabama', label: 'Catch Bus (Guindy to Sathyabama University)' },
-            { key: 'reachHostel', label: 'Reach College/Hostel (around 8:00 PM)' },
-            { key: 'dinner', label: 'Have Dinner (20 mins, 8:00 - 8:30 PM)' },
-        ];
+  <section id="achievements">
+    <h2>Achievements</h2>
+    <ul>
+      <li>Top 100 Women in Crypto (2024)</li>
+      <li>Founded 3 successful blockchain startups</li>
+      <li>Advisor to Fortune 500 tech firms</li>
+    </ul>
+  </section>
 
-        // Expense definitions (for UI rendering)
-        const expenseItemsDef = [
-            { key: 'busSathyabama', label: 'Bus (Sathyabama to Guindy)' },
-            { key: 'travelGuindyDlf', label: 'Travel (Guindy to DLF Ramapuram - Bus/Share Auto)' },
-            { key: 'lunchA2B', label: 'Lunch (A2B)' },
-            { key: 'shareAutoDlfGuindy', label: 'Share Auto (DLF Ramapuram to Guindy)' },
-            { key: 'busGuindySathyabama', label: 'Bus (Guindy to Sathyabama University)' },
-        ];
+  <section id="contact">
+    <h2>Contact</h2>
+    <p style="text-align: center;">Let's work together! Reach out via email or social media below.</p>
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="https://wa.me/qr/SEA4WF6YA5SIO1" class="btn">Whatsapp</a>
+      <a href="https://linkedin.com/in/shinek" class="btn" target="_blank">LinkedIn</a>
+    </div>
+  </section>
 
-        // --- Utility Functions ---
-        function showMessage(msg, type = 'info') {
-            messageDisplay.innerText = msg;
-            messageDisplay.classList.remove('hidden');
-            messageDisplay.classList.remove('bg-red-100', 'border-red-400', 'text-red-700', 'bg-blue-100', 'border-blue-400', 'text-blue-700');
-            if (type === 'error') {
-                messageDisplay.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-            } else {
-                messageDisplay.classList.add('bg-blue-100', 'border-blue-400', 'text-blue-700');
-            }
-            // Automatically hide message after a short delay
-            setTimeout(hideMessage, 3000);
+  <footer>
+    &copy; 2025 Shine K | Built with 💛 and blockchain
+  </footer>
+
+  <script>
+    const typewriterText = ["Crypto Strategist", "Web3 Advocate", "Blockchain Consultant"];
+    let i = 0, j = 0, current = "", isDeleting = false, speed = 150;
+
+    function type() {
+      const display = document.getElementById("typewriter-text");
+      if (i < typewriterText.length) {
+        if (!isDeleting && j <= typewriterText[i].length) {
+          current = typewriterText[i].substring(0, j++);
+          display.textContent = current;
         }
-
-        function hideMessage() {
-            messageDisplay.classList.add('hidden');
+        if (isDeleting && j > 0) {
+          current = typewriterText[i].substring(0, j--);
+          display.textContent = current;
         }
-
-        function showLoading() {
-            loadingIndicator.classList.remove('hidden');
-            appContent.classList.add('hidden');
+        if (j === typewriterText[i].length) isDeleting = true;
+        if (isDeleting && j === 0) {
+          isDeleting = false;
+          i = (i + 1) % typewriterText.length;
         }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
 
-        function hideLoading() {
-            loadingIndicator.classList.add('hidden');
-            appContent.classList.remove('hidden');
-        }
+    type();
 
-        function updateCurrentTimeDisplay() {
-            const now = new Date();
-            const hour = now.getHours();
-            let greeting = "Good Evening!";
-            if (hour < 12) greeting = "Good Morning!";
-            else if (hour < 18) greeting = "Good Afternoon!";
-            currentTimeDisplay.innerText = `${greeting} Today is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
-        }
-
-        // --- Render UI Functions ---
-        function renderRoutineItems() {
-            routineList.innerHTML = ''; // Clear previous items
-            routineItemsDef.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'flex items-center space-x-3 bg-white p-3 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer';
-                li.innerHTML = `
-                    <input
-                        type="checkbox"
-                        id="${item.key}"
-                        class="form-checkbox"
-                        ${routineStatus[item.key] ? 'checked' : ''}
-                    />
-                    <label for="${item.key}" class="flex-1 text-gray-800 cursor-pointer text-base sm:text-lg ${routineStatus[item.key] ? 'line-through text-gray-500 italic' : ''}">
-                        ${item.label}
-                    </label>
-                `;
-                // Add event listener to the checkbox itself
-                li.querySelector('input').addEventListener('change', (e) => handleRoutineToggle(item.key, e.target.checked));
-                routineList.appendChild(li);
-            });
-        }
-
-        function renderExpenseInputs() {
-            expenseInputsDiv.innerHTML = ''; // Clear previous inputs
-            expenseItemsDef.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'flex flex-col';
-                div.innerHTML = `
-                    <label for="${item.key}" class="text-gray-700 font-medium mb-1 text-base sm:text-lg">${item.label}:</label>
-                    <input
-                        type="number"
-                        id="${item.key}"
-                        value="${expenses[item.key] || 0}"
-                        placeholder="Enter amount in INR"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 shadow-sm"
-                    />
-                `;
-                div.querySelector('input').addEventListener('input', (e) => handleExpenseChange(item.key, e.target.value));
-                expenseInputsDiv.appendChild(div);
-            });
-            updateTotalExpenseDisplay();
-        }
-
-        function updateTotalExpenseDisplay() {
-            const sum = Object.values(expenses).reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-            totalDailyExpense = sum; // Update global variable
-            totalDailyExpenseDisplay.innerText = `Total Daily Expense: ₹${sum.toFixed(2)}`;
-        }
-
-        // --- Handlers ---
-        function handleRoutineToggle(itemKey, isChecked) {
-            routineStatus = { ...routineStatus, [itemKey]: isChecked };
-            renderRoutineItems(); // Re-render to update line-through style
-            saveDailyData(); // Automatically save on change
-        }
-
-        function handleExpenseChange(itemKey, value) {
-            expenses = { ...expenses, [itemKey]: parseFloat(value) || 0 };
-            updateTotalExpenseDisplay();
-            saveDailyData(); // Automatically save on change
-        }
-
-        async function saveDailyData() {
-            if (!db || !currentUserId || !selectedDate || !isAuthReady) {
-                showMessage("Error: App not fully initialized. Please try again.", 'error');
-                return;
-            }
-            showMessage('Saving data...');
-            try {
-                const docRef = doc(db, `artifacts/${__app_id}/users/${currentUserId}/dailyRoutines`, selectedDate);
-                await setDoc(docRef, {
-                    date: selectedDate,
-                    routineStatus: routineStatus,
-                    expenses: expenses,
-                    totalDailyExpense: totalDailyExpense,
-                    timestamp: new Date(), // Using client-side timestamp for simplicity
-                }, { merge: true }); // Use merge: true to update existing fields without overwriting the whole document
-                // showMessage('Data saved successfully!'); // Message is shown by showMessage()
-            } catch (error) {
-                console.error("Error saving daily routine data:", error);
-                showMessage("Error saving data.", 'error');
-            }
-        }
-
-        let unsubscribeFirestore = null; // To store the unsubscribe function for onSnapshot
-
-        async function loadDailyData() {
-            if (!db || !currentUserId || !selectedDate || !isAuthReady) {
-                console.log("Firestore not ready for loading data.");
-                return;
-            }
-
-            // Unsubscribe from previous listener if any
-            if (unsubscribeFirestore) {
-                unsubscribeFirestore();
-            }
-
-            showLoading();
-            showMessage(`Loading data for ${selectedDate}...`);
-
-            const docRef = doc(db, `artifacts/${__app_id}/users/${currentUserId}/dailyRoutines`, selectedDate);
-
-            unsubscribeFirestore = onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    // Initialize states with defaults if not present
-                    routineStatus = data.routineStatus || {};
-                    expenses = data.expenses || {};
-                    totalDailyExpense = data.totalDailyExpense || 0; // Set from loaded data
-
-                    showMessage("Data loaded successfully!");
-                } else {
-                    // If no data exists for the day, reset to defaults
-                    routineStatus = routineItemsDef.reduce((acc, item) => ({ ...acc, [item.key]: false }), {});
-                    expenses = expenseItemsDef.reduce((acc, item) => ({ ...acc, [item.key]: 0 }), {});
-                    totalDailyExpense = 0;
-                    showMessage("No data for this date. Start fresh!");
-                }
-                renderRoutineItems();
-                renderExpenseInputs();
-                updateTotalExpenseDisplay();
-                hideLoading();
-            }, (error) => {
-                console.error("Error fetching daily routine data:", error);
-                showMessage("Error loading data.", 'error');
-                hideLoading();
-            });
-        }
-
-        // --- Initialization ---
-        window.onload = async function() {
-            updateCurrentTimeDisplay();
-            setInterval(updateCurrentTimeDisplay, 1000); // Update time every second
-
-            datePicker.value = selectedDate; // Set initial date picker value
-            datePicker.addEventListener('change', (e) => {
-                selectedDate = e.target.value;
-                loadDailyData();
-            });
-
-            saveButton.addEventListener('click', saveDailyData);
-
-            try {
-                // Retrieve Firebase config and app ID from global variables
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Use default if __app_id is not set
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-                if (!firebaseConfig) {
-                    console.error("Firebase config not found. Make sure __firebase_config is set.");
-                    showMessage("Error: Firebase configuration missing.", 'error');
-                    hideLoading();
-                    return;
-                }
-
-                // Initialize Firebase
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // Sign in or listen for auth state changes
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        currentUserId = user.uid;
-                        actualUserIdSpan.innerText = currentUserId;
-                        userIdDisplay.classList.remove('hidden');
-                        isAuthReady = true;
-                        await loadDailyData(); // Load data once authenticated
-                    } else if (initialAuthToken) {
-                        try {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                            // onAuthStateChanged will be triggered again with the user
-                        } catch (error) {
-                            console.error("Error signing in with custom token:", error);
-                            showMessage("Error signing in. Falling back to anonymous.", 'error');
-                            await signInAnonymously(auth); // Fallback to anonymous
-                        }
-                    } else {
-                        try {
-                            await signInAnonymously(auth);
-                            // onAuthStateChanged will be triggered again with the user
-                        } catch (error) {
-                            console.error("Error signing in anonymously:", error);
-                            showMessage("Error signing in anonymously.", 'error');
-                            hideLoading();
-                        }
-                    }
-                });
-
-            } catch (error) {
-                console.error("Error initializing Firebase:", error);
-                showMessage("Error initializing the application.", 'error');
-                hideLoading();
-            }
-        };
-    </script>
+    // Menu toggle
+    document.getElementById("menu-toggle").addEventListener("click", function() {
+      document.getElementById("nav-links").classList.toggle("active");
+    });
+  </script>
 </body>
 </html>
