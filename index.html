@@ -390,6 +390,12 @@
                         <div class="stat-label">Days Tracked</div>
                     </div>
                 </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button onclick="clearAllData()" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">
+                        Clear All Data
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -399,6 +405,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateDateTime();
             setCurrentDate();
+            loadAllDataFromStorage();
             loadTodayData();
             updateStats();
             
@@ -520,11 +527,29 @@
                 data.expenses[id] = parseFloat(document.getElementById(id).value) || 0;
             });
 
-            // Save to memory (in a real app, this would go to a database)
-            if (!window.dailyData) {
-                window.dailyData = {};
+            // Load existing data from localStorage
+            let allData = {};
+            try {
+                const savedData = localStorage.getItem('dailyRoutineData');
+                if (savedData) {
+                    allData = JSON.parse(savedData);
+                }
+            } catch (e) {
+                console.log('Error loading data:', e);
             }
-            window.dailyData[selectedDate] = data;
+
+            // Save current day's data
+            allData[selectedDate] = data;
+
+            // Save to localStorage
+            try {
+                localStorage.setItem('dailyRoutineData', JSON.stringify(allData));
+                window.dailyData = allData;
+            } catch (e) {
+                console.log('Error saving data:', e);
+                alert('Unable to save data. Please check your browser settings.');
+                return;
+            }
 
             // Update statistics
             updateStats();
@@ -539,6 +564,20 @@
                 btn.textContent = originalText;
                 btn.style.backgroundColor = '#007bff';
             }, 2000);
+        }
+
+        function loadAllDataFromStorage() {
+            try {
+                const savedData = localStorage.getItem('dailyRoutineData');
+                if (savedData) {
+                    window.dailyData = JSON.parse(savedData);
+                } else {
+                    window.dailyData = {};
+                }
+            } catch (e) {
+                console.log('Error loading data from storage:', e);
+                window.dailyData = {};
+            }
         }
 
         function loadTodayData() {
@@ -623,6 +662,21 @@
             document.getElementById('weeklyTotal').textContent = `₹${weeklyTotal.toFixed(2)}`;
             document.getElementById('avgDaily').textContent = `₹${avgDaily.toFixed(2)}`;
             document.getElementById('daysTracked').textContent = daysTracked;
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all saved data? This cannot be undone.')) {
+                try {
+                    localStorage.removeItem('dailyRoutineData');
+                    window.dailyData = {};
+                    clearAllInputs();
+                    updateStats();
+                    alert('All data cleared successfully!');
+                } catch (e) {
+                    console.log('Error clearing data:', e);
+                    alert('Error clearing data. Please try again.');
+                }
+            }
         }
 
         // Update time every second
